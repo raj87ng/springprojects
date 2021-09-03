@@ -1,0 +1,83 @@
+package com.rajat.mock.server.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.rajat.mock.server.entity.DealerInfo;
+import com.rajat.mock.server.model.DealerDetails;
+import com.rajat.mock.server.model.DealerDto;
+
+@Service
+public class DealerService {
+	private static final Logger LOG = LoggerFactory.getLogger(DealerService.class);
+	private static final Map<String,DealerInfo> dealerData = new ConcurrentHashMap<>();
+	
+	public Optional<DealerDto> getAllDealerRecords() {
+		LOG.debug("Inside getAllDealerRecords method");
+		List<DealerInfo> dealersInfo = dealerData.values().stream().collect(Collectors.toList());
+		
+		List<DealerDetails> dealersInfo1 = new ArrayList<>();
+		dealersInfo.forEach(x -> {
+			DealerDetails details = new DealerDetails();
+			details.setDealerId(x.getDealerId());
+			details.setDealerName(x.getDealerName());
+			details.setDealerCity(x.getDealerCity());
+			details.setDealerCountry(x.getDealerCountry());
+			dealersInfo1.add(details);
+		});
+		DealerDto dto = new DealerDto();
+		dto.setDealerDetails(dealersInfo1);
+		LOG.debug("getAllDealerRecords fetched successfully");
+		return Optional.ofNullable(dto);
+	}
+
+	
+	
+	@PostConstruct
+	public void init() {
+		
+		addDealerDetails();
+	}
+	
+	/**
+	 * Add Records
+	 */
+	private void addDealerDetails() {
+		DealerInfo d1 = new DealerInfo();
+		d1.setDealerId(1);
+		d1.setDealerName("ABC");
+		d1.setDealerCountry("INDIA");
+		d1.setDealerCity("GURUGRAM");
+		dealerData.put("1", d1);
+		DealerInfo d2 = new DealerInfo();
+		d2.setDealerId(2);
+		d2.setDealerName("GTY");
+		d2.setDealerCountry("INDIA");
+		d2.setDealerCity("DELHI");
+		dealerData.put("2", d2);
+		DealerInfo d3 = new DealerInfo();
+		d3.setDealerId(3);
+		d3.setDealerName("JUI");
+		d3.setDealerCountry("INDIA");
+		d3.setDealerCity("BANGLORE");
+		dealerData.put("3", d3);
+		DealerInfo d4 = new DealerInfo();
+		d4.setDealerId(4);
+		d4.setDealerName("DLM");
+		d4.setDealerCountry("INDIA");
+		d4.setDealerCity("NOIDA");
+		dealerData.put("4", d4);
+	}
+	
+	
+}
