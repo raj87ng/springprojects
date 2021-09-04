@@ -3,6 +3,7 @@ package com.rajat.mock.server.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -41,12 +42,32 @@ public class DealerService {
 		return Optional.ofNullable(dto);
 	}
 
-	
+	public Optional<DealerDto> getSingleDealerRecord(String dealerId) {
+		LOG.debug("Inside getSingleDealerRecord method");
+		DealerInfo dealerInfo = null;
+		if(Objects.nonNull(dealerData.get(dealerId))) {
+			dealerInfo = dealerData.get(dealerId);
+			
+		}else {
+			return Optional.empty();
+		}
+		List<DealerDetails> dealersInfo1 = new ArrayList<>();
+		DealerDetails details = new DealerDetails();
+		details.setDealerId(dealerInfo.getDealerId());
+		details.setDealerName(dealerInfo.getDealerName());
+		details.setDealerCity(dealerInfo.getDealerCity());
+		details.setDealerCountry(dealerInfo.getDealerCountry());
+		dealersInfo1.add(details);
+		DealerDto dto = new DealerDto();
+		dto.setDealerDetails(dealersInfo1);
+		return Optional.ofNullable(dto);
+	}
 	
 	@PostConstruct
 	public void init() {
-		
+		LOG.debug("In Post Construct Init method");
 		addDealerDetails();
+		LOG.debug("Exit Post Construct Init method");
 	}
 	
 	/**
@@ -77,6 +98,7 @@ public class DealerService {
 		d4.setDealerCountry("INDIA");
 		d4.setDealerCity("NOIDA");
 		dealerData.put("4", d4);
+		LOG.debug("Add Data in MAP {}",dealerData.toString());
 	}
 	
 	

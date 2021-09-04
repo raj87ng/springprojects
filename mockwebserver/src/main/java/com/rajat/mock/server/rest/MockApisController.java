@@ -55,10 +55,18 @@ public class MockApisController {
 		return new ResponseEntity<>(clientResponse,HttpStatus.NO_CONTENT);
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GetMapping(value = "/v1/records/dealers/{dealerid}", produces = MediaType.APPLICATION_JSON_VALUE)
-	ResponseEntity<ClientResponse<DealerDto>> getSingleRecord(@PathVariable @OnlyDigitsAllowed @Max(value=10,message = "Not more than 10") String dealerCode){
-		
-		return new ResponseEntity<T>(null,HttpStatus.OK);
+	ResponseEntity<ClientResponse<DealerDto>> getSingleRecord(@PathVariable @OnlyDigitsAllowed String dealerid){
+		Optional<DealerDto> dealerRecords = dealerService.getSingleDealerRecord(dealerid);
+		ClientResponse clientResponse = null;
+		if(dealerRecords.isPresent()) {
+			clientResponse=  new ClientResponse.ResponseBuilder<>("dealer-1", "SUCCESS").withClientData(dealerRecords).build();
+			return new ResponseEntity<>(clientResponse,HttpStatus.OK);
+		}else {
+			clientResponse=  new ClientResponse.ResponseBuilder<>("dealer-2", "No Dealer Data Found").build();
+			return new ResponseEntity<>(clientResponse,HttpStatus.NO_CONTENT);
+		}
 	}
 
 }
