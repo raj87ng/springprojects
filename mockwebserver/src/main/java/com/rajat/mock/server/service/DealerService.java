@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.rajat.mock.server.entity.DealerInfo;
+import com.rajat.mock.server.model.DealerDetail;
 import com.rajat.mock.server.model.DealerDetails;
 import com.rajat.mock.server.model.DealerDto;
 
@@ -62,6 +63,19 @@ public class DealerService {
 		dto.setDealerDetails(dealersInfo1);
 		return Optional.ofNullable(dto);
 	}
+	
+	public boolean saveDealerRecord(DealerDetail dealer) {
+		int records = dealerData.size();
+		DealerInfo dlr = new DealerInfo();
+		dlr.setDealerId(records);
+		dlr.setDealerName(dealer.getDealerName());
+		dlr.setDealerCountry(dealer.getDealerCountry());
+		dlr.setDealerCity(dealer.getDealerCity());
+		dealerData.put(String.valueOf(records), dlr);
+		return true;
+	}
+	
+	
 	
 	@PostConstruct
 	public void init() {

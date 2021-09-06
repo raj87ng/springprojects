@@ -2,6 +2,7 @@ package com.rajat.mock.server.rest;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 
 import org.slf4j.Logger;
@@ -13,9 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rajat.mock.server.annotations.OnlyDigitsAllowed;
+import com.rajat.mock.server.model.DealerDetail;
 import com.rajat.mock.server.model.DealerDto;
 import com.rajat.mock.server.response.ClientResponse;
 import com.rajat.mock.server.service.DealerService;
@@ -42,7 +47,7 @@ public class MockApisController {
 			return new ResponseEntity<>(clientResponse,HttpStatus.OK);
 		}else {
 			clientResponse=  new ClientResponse.ResponseBuilder<>("dealer-2", "No Dealer Data Found").build();
-			return new ResponseEntity<>(clientResponse,HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(clientResponse,HttpStatus.BAD_REQUEST);
 		}
 		
 	}
@@ -52,7 +57,7 @@ public class MockApisController {
 	ResponseEntity<ClientResponse> getAllRecordsWithNoRecords(){
 		ClientResponse clientResponse = null;
 		clientResponse=  new ClientResponse.ResponseBuilder<>("dealer-2", "No Dealer Data Found").build();
-		return new ResponseEntity<>(clientResponse,HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(clientResponse,HttpStatus.BAD_REQUEST);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -65,8 +70,23 @@ public class MockApisController {
 			return new ResponseEntity<>(clientResponse,HttpStatus.OK);
 		}else {
 			clientResponse=  new ClientResponse.ResponseBuilder<>("dealer-2", "No Dealer Data Found").build();
-			return new ResponseEntity<>(clientResponse,HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(clientResponse,HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PostMapping(value = "/v1/records/dealers", produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+	ResponseEntity<ClientResponse<String>> saveDealerRecord(@RequestBody @Valid DealerDetail dealer){
+		ClientResponse clientResponse = null;
+		if(dealerService.saveDealerRecord(dealer)) {
+			clientResponse=  new ClientResponse.ResponseBuilder<>("dealer-1", "SUCCESS").withClientData("Saved").build();
+			return new ResponseEntity<>(clientResponse,HttpStatus.OK);
+		}
+		else {
+			clientResponse=  new ClientResponse.ResponseBuilder<>("dealer-3", "Not Saved").build();
+			return new ResponseEntity<>(clientResponse,HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	
 
 }
