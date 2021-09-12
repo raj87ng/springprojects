@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,11 +68,34 @@ public class DealerService {
 	public boolean saveDealerRecord(DealerDetail dealer) {
 		int records = dealerData.size();
 		DealerInfo dlr = new DealerInfo();
-		dlr.setDealerId(records);
+		dlr.setDealerId(records+1);
 		dlr.setDealerName(dealer.getDealerName());
 		dlr.setDealerCountry(dealer.getDealerCountry());
 		dlr.setDealerCity(dealer.getDealerCity());
 		dealerData.put(String.valueOf(records), dlr);
+		return true;
+	}
+	
+	public boolean updateDealerRecord(@Valid DealerDetail dealer, String dealerid) {
+		if(Objects.nonNull(dealerData.get(dealerid))) {
+			DealerInfo dlr = dealerData.get(dealerid);
+			dlr.setDealerName(dealer.getDealerName());
+			dlr.setDealerCountry(dealer.getDealerCountry());
+			dlr.setDealerCity(dealer.getDealerCity());
+			dealerData.put(dealerid, dlr);
+			LOG.debug("Updated record {} " , dealerData.get(dealerid));
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean deleteDealerRecord(String dealerId) {
+		DealerInfo dlr = dealerData.remove(dealerId);
+		if(Objects.isNull(dlr)){
+			LOG.debug("Deleted record Not Found {} " , dlr);
+			return false;
+		}
+		LOG.debug("Deleted record {} " , dlr);
 		return true;
 	}
 	
@@ -114,6 +138,8 @@ public class DealerService {
 		dealerData.put("4", d4);
 		LOG.debug("Add Data in MAP {}",dealerData.toString());
 	}
+
+	
 	
 	
 }
