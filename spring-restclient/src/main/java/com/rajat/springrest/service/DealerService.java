@@ -38,8 +38,7 @@ public class DealerService {
 	}
 	
 	public boolean updateDealerRecord(@Valid DealerDetail dealer, String dealerid) {
-		
-		return false;
+		return clientApi.updateDealerRecord(dealer, dealerid);
 	}
 	
 	public boolean deleteDealerRecord(String dealerId) {

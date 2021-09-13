@@ -20,6 +20,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.rajat.springrest.exception.BadRequestException;
 import com.rajat.springrest.response.ResponseEntityBuilder;
 import com.rajat.springrest.response.RestApiErrorResponse;
 
@@ -115,6 +116,14 @@ public class RestClientControllerAdvice extends ResponseEntityExceptionHandler{
          return ResponseEntityBuilder.build(err);
      }
 	 
+	
+	@ExceptionHandler({ BadRequestException.class })
+	public ResponseEntity<Object> handleBadException(Exception ex) {
+		RestApiErrorResponse apiError = new RestApiErrorResponse(
+				HttpStatus.BAD_REQUEST, ex.getMessage(),"Bad Request");
+	    return ResponseEntityBuilder.build(apiError);
+	}
+	
 	
 	@ExceptionHandler({ Exception.class })
 	public ResponseEntity<Object> handleException(Exception ex) {
