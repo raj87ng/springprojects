@@ -43,7 +43,7 @@ public class DealerService {
 	
 	public boolean deleteDealerRecord(String dealerId) {
 		
-		return true;
+		return clientApi.deleteDealerRecord(dealerId);
 	}
 	
 	

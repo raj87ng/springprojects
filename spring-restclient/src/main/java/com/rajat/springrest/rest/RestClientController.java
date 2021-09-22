@@ -54,6 +54,55 @@ private static final Logger LOG = LoggerFactory.getLogger(RestClientController.c
 		
 	}
 	
+	/**
+	 * OUTPUT : 
+	 * {
+    "clientCode": "dealer-1",
+    "clientMessage": "SUCCESS",
+    "clientData": {
+        "dealerDetails": [
+            {
+                "dealerId": 1,
+                "dealerName": "ABC",
+                "dealerCountry": "INDIA",
+                "dealerCity": "GURUGRAM"
+            },
+            {
+                "dealerId": 2,
+                "dealerName": "GTY",
+                "dealerCountry": "INDIA",
+                "dealerCity": "DELHI"
+            },
+            {
+                "dealerId": 3,
+                "dealerName": "JUI",
+                "dealerCountry": "INDIA",
+                "dealerCity": "BANGLORE"
+            },
+            {
+                "dealerId": 4,
+                "dealerName": "DLM",
+                "dealerCountry": "INDIA",
+                "dealerCity": "NOIDA"
+            },
+            {
+                "dealerId": 5,
+                "dealerName": "SAGARRR",
+                "dealerCountry": "INDIA",
+                "dealerCity": "GAZIABAD"
+            },
+            {
+                "dealerId": 6,
+                "dealerName": "RAJAT",
+                "dealerCountry": "INDIA",
+                "dealerCity": "XSSSS"
+            }
+        ]
+    }
+}
+	 * @return
+	 */
+	
 	@SuppressWarnings("rawtypes")
 	@GetMapping(value = Constants.GET_RECORD_NOTFOUND, produces = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<ClientResponse> getAllRecordsWithNoRecords(){
@@ -76,6 +125,27 @@ private static final Logger LOG = LoggerFactory.getLogger(RestClientController.c
 		}
 	}
 	
+	/**
+	 * OutPut :
+	 * 
+	 * {
+    "clientCode": "dealer-1",
+    "clientMessage": "SUCCESS",
+    "clientData": {
+        "dealerDetails": [
+            {
+                "dealerId": 6,
+                "dealerName": "RAJAT",
+                "dealerCountry": "INDIA",
+                "dealerCity": "XSSSSS"
+            }
+        ]
+    }
+}
+	 * @param dealer
+	 * @return
+	 */
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PostMapping(value = Constants.POST_DEALER_RECORD, produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<ClientResponse<String>> saveDealerRecord(@RequestBody @Valid DealerDetail dealer){
@@ -90,10 +160,25 @@ private static final Logger LOG = LoggerFactory.getLogger(RestClientController.c
 		}
 	}
 	
+	/*
+	 * Input :
+	 * {
+                "dealerName": "RAJAT",
+                "dealerCountry": "INDIA",
+                "dealerCity": "NARAINGARH"
+            }
+            
+       OutPut : 
+       {
+    "clientCode": "dealer-1",
+    "clientMessage": "SUCCESS",
+    "clientData": "Saved"
+}     
+	 */
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PutMapping(value = Constants.GETORDELETE_DEALER_RECORD, produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-	ResponseEntity<ClientResponse<String>> saveDealerRecord(@PathVariable @OnlyDigitsAllowed String dealerid, @RequestBody @Valid DealerDetail dealer){
+	ResponseEntity<ClientResponse<String>> updateDealerRecord(@PathVariable @OnlyDigitsAllowed String dealerid, @RequestBody @Valid DealerDetail dealer){
 		ClientResponse clientResponse = null;
 		if(dealerService.updateDealerRecord(dealer,dealerid)) {
 			clientResponse=  new ClientResponse.ResponseBuilder<>(Constants.DEALER_1, Constants.SUCCESS).withClientData(Constants.UPDATED).build();
@@ -106,7 +191,7 @@ private static final Logger LOG = LoggerFactory.getLogger(RestClientController.c
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@DeleteMapping(value = Constants.GETORDELETE_DEALER_RECORD, produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = Constants.GETORDELETE_DEALER_RECORD, produces = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<ClientResponse<String>> deleteDealerRecord(@PathVariable @OnlyDigitsAllowed String dealerid){
 		ClientResponse clientResponse = null;
 		if(dealerService.deleteDealerRecord(dealerid)) {

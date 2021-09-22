@@ -1,6 +1,9 @@
 package com.rajat.springrest.service;
 
+import java.awt.SecondaryLoop;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -76,23 +79,117 @@ public class RestClientApi implements ClientApis{
 	@Override
 	public boolean saveDealerRecord(DealerDetail dealer) {
 		LOG.debug("In saveDealerRecord method of {} ",this.getClass());
-		return false;
+		ResponseEntity<String> response = saveRecord(dealer);
+		if(response.getStatusCode()==HttpStatus.BAD_REQUEST) {
+			return false;
+		}
+		return true;
 	}
+
+	private ResponseEntity<String> saveRecord(DealerDetail dealer) {
+		try {
+			String url = baseurl+postRecord;
+			HttpEntity<DealerDetail> httpEntity = new HttpEntity<>(dealer, createHeaders());
+			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+			return response;
+			}
+			catch(HttpClientErrorException hce) {
+				if(hce.getStatusCode()==HttpStatus.UNAUTHORIZED) {
+					throw new BadRequestException("Unauthorized Access");
+				}else if(hce.getStatusCode()==HttpStatus.FORBIDDEN) {
+					throw new BadRequestException("Forbidden Access");
+				}else {
+					throw new BadRequestException("Failure");
+				}
+			}catch(Exception e) {
+				throw new BadRequestException("Generic Failure");
+			}
+		}
+	
 
 	@Override
 	public boolean updateDealerRecord(@Valid DealerDetail dealer, String dealerid) {
 		LOG.debug("In updateDealerRecord method of {} ",this.getClass());
-		return false;
+		ResponseEntity<String> response = updateRecord(dealer,dealerid);
+		if(response.getStatusCode()==HttpStatus.BAD_REQUEST) {
+			return false;
+		}
+		return true;
+	}
+
+	private ResponseEntity<String> updateRecord(@Valid DealerDetail dealer, String dealerid) {
+		try {
+			String url = baseurl+getSingleRecordUrl;
+			// Second way to add PAth Variables and QueryParams
+			/**
+			 * Map<String, String> params = new HashMap<String, String>();
+               params.put("dealerid", dealerid);
+               URI uri = UriComponentsBuilder.fromUriString(url)
+                  .buildAndExpand(params)
+                  .toUri();
+                uri = UriComponentsBuilder
+		        .fromUri(uri)
+		        .queryParam("name", "myName")
+		        .build()
+		        .toUri();
+			 */
+			
+		    URI uri = UriComponentsBuilder.fromUriString(url).buildAndExpand(dealerid).toUri();
+			LOG.debug("URI is  method of {} and {}",uri.toString(),uri.toURL().toString());
+			HttpEntity<DealerDetail> httpEntity = new HttpEntity<>(dealer, createHeaders());
+			ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.PUT, httpEntity, String.class);
+			return response;
+			}
+			catch(HttpClientErrorException hce) {
+				if(hce.getStatusCode()==HttpStatus.UNAUTHORIZED) {
+					throw new BadRequestException("Unauthorized Access");
+				}else if(hce.getStatusCode()==HttpStatus.FORBIDDEN) {
+					throw new BadRequestException("Forbidden Access");
+				}else {
+					throw new BadRequestException("Failure");
+				}
+			}catch(Exception e) {
+				LOG.error("ERROR message is : {}",e.getMessage());
+				e.printStackTrace();
+				throw new BadRequestException("Generic Failure");
+			}
 	}
 
 	@Override
 	public boolean deleteDealerRecord(String dealerId) {
 		LOG.debug("In deleteDealerRecord method of {} ",this.getClass());
-		return false;
+		ResponseEntity<String> response = deleteRecord(dealerId);
+		if(response.getStatusCode()==HttpStatus.BAD_REQUEST) {
+			return false;
+		}
+		return true;
 	}
 	
 	
 	
+	private ResponseEntity<String> deleteRecord(String dealerId) {
+		try {
+			String url = baseurl+getSingleRecordUrl;
+		    URI uri = UriComponentsBuilder.fromUriString(url).buildAndExpand(dealerId).toUri();
+			LOG.debug("URI is  method of {} and {}",uri.toString(),uri.toURL().toString());
+			HttpEntity<String> httpEntity = new HttpEntity<>(null, createHeaders());
+			ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.DELETE, httpEntity, String.class);
+			return response;
+			}
+			catch(HttpClientErrorException hce) {
+				if(hce.getStatusCode()==HttpStatus.UNAUTHORIZED) {
+					throw new BadRequestException("Unauthorized Access");
+				}else if(hce.getStatusCode()==HttpStatus.FORBIDDEN) {
+					throw new BadRequestException("Forbidden Access");
+				}else {
+					throw new BadRequestException("Failure");
+				}
+			}catch(Exception e) {
+				LOG.error("ERROR message is : {}",e.getMessage());
+				throw new BadRequestException("Generic Failure");
+			}
+	}
+
 	private ResponseEntity<DealerResponse> getAllRecordsRestCall() {
 		try {
 		String url = baseurl+getAllRecordsUrl;

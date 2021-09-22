@@ -67,8 +67,11 @@ public class DealerService {
 	
 	public boolean saveDealerRecord(DealerDetail dealer) {
 		int records = dealerData.size();
+		if(dealerData.containsKey(String.valueOf(records))){
+			records+=1;
+		}
 		DealerInfo dlr = new DealerInfo();
-		dlr.setDealerId(records+1);
+		dlr.setDealerId(records);
 		dlr.setDealerName(dealer.getDealerName());
 		dlr.setDealerCountry(dealer.getDealerCountry());
 		dlr.setDealerCity(dealer.getDealerCity());

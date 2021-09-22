@@ -92,7 +92,7 @@ public class MockApisController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@PutMapping(value = Constants.GETORDELETE_DEALER_RECORD, produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-	ResponseEntity<ClientResponse<String>> saveDealerRecord(@PathVariable @OnlyDigitsAllowed String dealerid, @RequestBody @Valid DealerDetail dealer){
+	ResponseEntity<ClientResponse<String>> updateDealerRecord(@PathVariable @OnlyDigitsAllowed String dealerid, @RequestBody @Valid DealerDetail dealer){
 		ClientResponse clientResponse = null;
 		if(dealerService.updateDealerRecord(dealer,dealerid)) {
 			clientResponse=  new ClientResponse.ResponseBuilder<>(Constants.DEALER_1, Constants.SUCCESS).withClientData(Constants.UPDATED).build();
