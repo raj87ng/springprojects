@@ -1,5 +1,6 @@
 package com.rajat.springrest.service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -85,24 +85,77 @@ public class WebClientApi implements ClientApis{
 	@Override
 	public Optional<DealerDto> getSingleDealerRecord(String dealerId) {
 		LOG.debug("In getSingleDealerRecord method {} ",this.getClass());
-		return null;
+		DealerResponse response = getSingleRecordsRestCall(dealerId);
+          LOG.debug("In getSingleDealerRecord method of {} with data {}",this.getClass(),response);
+		
+		return Optional.ofNullable(response.getClientData());
+	}
+
+	private DealerResponse getSingleRecordsRestCall(String dealerId) {
+		return this.webClient
+		   .get()
+		   .uri(uriBuilder -> uriBuilder.path("/mockserver"+getSingleRecordUrl)
+		   .build(dealerId))
+		   .retrieve()
+		   .onStatus(HttpStatus::is4xxClientError, response -> Mono.error(new BadRequestException("Error in Get Records")))
+		   .bodyToMono(DealerResponse.class)
+		   .block();
 	}
 
 	@Override
 	public boolean saveDealerRecord(DealerDetail dealer) {
 		LOG.debug("In saveDealerRecord method {} ",this.getClass());
-		return false;
+		String response = saveRecord(dealer);
+		return (Objects.nonNull(response)?true:false);
+	}
+
+	private String saveRecord(DealerDetail dealer) {
+		return this.webClient.post()
+		.uri("/mockserver"+postRecord)
+		.contentType(MediaType.APPLICATION_JSON)
+		.accept(MediaType.APPLICATION_JSON)
+		.body(Mono.just(dealer),DealerDetail.class)
+		.retrieve()
+		.onStatus(HttpStatus::is4xxClientError, response -> Mono.error(new BadRequestException("Error in Get Records")))
+		   .bodyToMono(String.class)
+		   .block();
 	}
 
 	@Override
 	public boolean updateDealerRecord(@Valid DealerDetail dealer, String dealerid) {
 		LOG.debug("In updateDealerRecord method {} ",this.getClass());
-		return false;
+		String response = updateRecord(dealer,dealerid);
+		return (Objects.nonNull(response)?true:false);
+	}
+
+	private String updateRecord(@Valid DealerDetail dealer, String dealerid) {
+		return this.webClient.put()
+				.uri(uriBuilder -> uriBuilder.path("/mockserver"+getSingleRecordUrl)
+			    .build(dealerid))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.body(Mono.just(dealer),DealerDetail.class)
+				.retrieve()
+				.onStatus(HttpStatus::is4xxClientError, response -> Mono.error(new BadRequestException("Error in Get Records")))
+				   .bodyToMono(String.class)
+				   .block();
 	}
 
 	@Override
 	public boolean deleteDealerRecord(String dealerId) {
 		LOG.debug("In deleteDealerRecord method {} ",this.getClass());
-		return false;
+		String response = deleteRecord(dealerId);
+		return (Objects.nonNull(response)?true:false);
+	}
+
+	private String deleteRecord(String dealerId) {
+		return this.webClient.delete()
+				.uri(uriBuilder -> uriBuilder.path("/mockserver"+getSingleRecordUrl)
+			    .build(dealerId))
+				.accept(MediaType.APPLICATION_JSON)
+				.retrieve()
+				.onStatus(HttpStatus::is4xxClientError, response -> Mono.error(new BadRequestException("Error in Get Records")))
+				   .bodyToMono(String.class)
+				   .block();
 	}
 }

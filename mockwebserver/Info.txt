@@ -1,0 +1,78 @@
+
+Controllers are :
+1. MockApisController : Get/Post/Put/Delete Apis are added and returning ResponseEntity.
+                        Backend : Local cache ( ConcurrentHashMap )
+2. EmployeeController : Get/Post/Put/Delete Apis are added and returning webFlux.
+                        Backend : MongoDb used through reactive mongo
+
+                        ADD_EMPLOYEE= "/v1/add/employees";
+	                    GET_ALL_EMPLOYEES="/v1/get/employees";
+	                    GET_SINGLE_EMPLOYEE="/v1/get/employees/employee/{employeeId}";
+	                    GET_EMPLOYEE_BY_NAME="/v1/get/employee/name/{name}";
+	                    UPDATE_EMPLOYEE= "/v1/update/employees";
+	                    DELETE_EMPLOYEE= "/v1/delete/employees/employee/{employeeId}";
+	                    
+Note: WebClient information added in rest-client project under src/resources/notes
+
+POST localhost:8383/mockserver/v1/add/employees
+Request Body : 
+{
+    "name":"RAJAT",
+    "salary":200000
+}
+
+Response : 
+{
+    "@class": "com.rajat.mock.server.entity.Employee",
+    "id": "61507f59ae74634e2577addd",
+    "name": "RAJAT",
+    "salary": 200000,
+    "createdOn": "2021-09-26T14:10:32.984+00:00",
+    "modifiedOn": "2021-09-26T14:10:32.984+00:00"
+}
+
+Request :
+{
+    "name":"SAGAR",
+    "salary":250000
+}
+Response : 
+{
+    "@class": "com.rajat.mock.server.entity.Employee",
+    "id": "61507ffdae74634e2577adde",
+    "name": "SAGAR",
+    "salary": 250000,
+    "createdOn": "2021-09-26T14:13:17.235+00:00",
+    "modifiedOn": "2021-09-26T14:13:17.235+00:00"
+}
+
+Request :
+{
+    "name":"SAG",
+    "salary":250000
+}
+Response : 
+{
+    "status": "BAD_REQUEST",
+    "message": "Validation Errors",
+    "errors": [
+        "employeeDto : Name shall be in 5 to 20 length"
+    ]
+}
+
+
+Request : http://localhost:8383/mockserver/v1/get/employees
+Response :
+data:{"@class":"com.rajat.mock.server.entity.Employee","id":"61507f59ae74634e2577addd","name":"RAJAT","salary":200000,"createdOn":"2021-09-26T14:10:32.984+00:00","modifiedOn":"2021-09-26T14:10:32.984+00:00"}
+
+data:{"@class":"com.rajat.mock.server.entity.Employee","id":"61507ffdae74634e2577adde","name":"SAGAR","salary":250000,"createdOn":"2021-09-26T14:13:17.235+00:00","modifiedOn":"2021-09-26T14:13:17.235+00:00"}
+
+
+Request : 
+http://localhost:8383/mockserver/v1/get/employees/employee/61507ffdae74634e2577adde
+
+Response: 
+{"@class":"com.rajat.mock.server.entity.Employee","id":"61507ffdae74634e2577adde",
+"name":"SAGAR","salary":250000,"createdOn":"2021-09-26T14:13:17.235+00:00","modifiedOn":"2021-09-26T14:13:17.235+00:00"}
+
+

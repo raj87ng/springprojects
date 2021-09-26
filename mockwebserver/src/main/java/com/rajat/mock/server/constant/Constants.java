@@ -26,4 +26,12 @@ public class Constants {
 			public static final String RECORD_DELETED = "Record Deleted";
 			public static final String SAVED = "Saved";
 			public static final String UPDATED = "Updated";
+	
+// Employee Controller endPoints :
+	public static final String ADD_EMPLOYEE= "/v1/add/employees";
+	public static final String GET_ALL_EMPLOYEES="/v1/get/employees";
+	public static final String GET_SINGLE_EMPLOYEE="/v1/get/employees/employee/{employeeId}";
+	public static final String GET_EMPLOYEE_BY_NAME="/v1/get/employee/name/{name}";
+	public static final String UPDATE_EMPLOYEE= "/v1/update/employees";
+	public static final String DELETE_EMPLOYEE= "/v1/delete/employees/employee/{employeeId}";
 }
