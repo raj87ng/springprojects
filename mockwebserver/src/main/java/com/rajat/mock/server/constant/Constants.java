@@ -34,4 +34,13 @@ public class Constants {
 	public static final String GET_EMPLOYEE_BY_NAME="/v1/get/employee/name/{name}";
 	public static final String UPDATE_EMPLOYEE= "/v1/update/employees";
 	public static final String DELETE_EMPLOYEE= "/v1/delete/employees/employee/{employeeId}";
+	
+	//Person controller :
+	
+	public static final String ADD_PERSON= "/v1/add/person";
+	public static final String GET_PERSON="/v1/get/person/{id}";
+	public static final String DELETE_PERSON="/v1/delete/person/{id}";
+	public static final String UPDATE_PERSON="/v1/update/person";
+	
+
 }
