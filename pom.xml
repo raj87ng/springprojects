@@ -122,5 +122,6 @@
 <modules>
 <module>spring-restclient</module>
 <module>mockwebserver</module>
+	<module>spring-parallelwebclients</module>
 </modules>
 </project>
