@@ -3,6 +3,7 @@ package com.rajat.springparallelwebclients.service;
 import com.rajat.springparallelwebclients.model.Item;
 import com.rajat.springparallelwebclients.model.User;
 import com.rajat.springparallelwebclients.model.UserWithItem;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -15,9 +16,12 @@ import java.util.logging.Logger;
 public class UserClient {
     private static final Logger LOG = Logger.getLogger(UserClient.class.getName());
 
+    /*@Value("${unknown.param:some default}")
+    private String someDefault;*/
+
     private WebClient webClient;
 
-    public UserClient(String uri) {
+    public UserClient(@Value("${uri.path:localhost}") String uri) {
         this.webClient = WebClient.create(uri);
     }
 

@@ -1,4 +1,4 @@
-package com.rajat.springrest.constant;
+package com.rajat.springparallelwebclients.constant;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -26,4 +26,11 @@ public class Constants {
 			public static final String RECORD_DELETED = "Record Deleted";
 			public static final String SAVED = "Saved";
 			public static final String UPDATED = "Updated";
+
+	public static final String ADD_STUDENT= "/v1/add/students";
+	public static final String GET_ALL_STUDENTS="/v1/get/students";
+	public static final String GET_SINGLE_STUDENT="/v1/get/students/student/{studentId}";
+	public static final String GET_STUDENT_BY_NAME="/v1/get/student/name/{name}";
+	public static final String UPDATE_STUDENT= "/v1/update/students";
+	public static final String DELETE_STUDENT= "/v1/delete/students/student/{studentId}";
 }
