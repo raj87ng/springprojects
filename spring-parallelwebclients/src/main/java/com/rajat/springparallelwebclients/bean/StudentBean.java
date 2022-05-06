@@ -22,6 +22,10 @@ public class StudentBean implements Serializable{
 	@OnlyStringAllowed
 	@Size(min=5, max=20, message="Name shall be in 5 to 20 length")
 	private String name;
+	@NotBlank
+	@OnlyStringAllowed
+	@Size(min=5, max=20, message="Last Name shall be in 5 to 20 length")
+	private String lastName;
 	private int age;
 	@NotNull
 	private long id;

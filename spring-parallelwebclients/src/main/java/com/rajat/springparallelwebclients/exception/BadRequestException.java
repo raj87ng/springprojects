@@ -1,4 +1,4 @@
-package com.rajat.springrest.exception;
+package com.rajat.springparallelwebclients.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

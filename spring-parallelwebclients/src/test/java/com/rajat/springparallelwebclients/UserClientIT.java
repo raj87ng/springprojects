@@ -63,7 +63,7 @@ public class UserClientIT {
        // assertEquals("Unexpected number of users", requestsNumber, users.size());
     }
 
-  
+
     @Test
     public void givenClient_whenFetchingUsers_thenExecutionTimeIsLessThanDouble() {
         // Arrange

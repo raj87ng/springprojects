@@ -100,7 +100,7 @@ public class StudentControllerAdvice extends ResponseEntityExceptionHandler{
          details = ex.getBindingResult()
                      .getFieldErrors()
                      .stream()
-                     .map(error -> error.getObjectName()+ " : " +error.getDefaultMessage())
+                     .map(error -> /*error.getObjectName()*/ error.getField()+ " : " +error.getDefaultMessage())
                      .collect(Collectors.toList());
          
          RestApiErrorResponse err = new RestApiErrorResponse(
